@@ -266,6 +266,7 @@ require('lazy').setup({
   },
   { 'codota/tabnine-nvim', build = 'pwsh.exe -file .\\dl_binaries.ps1' },
 
+  { 'stevearc/oil.nvim' },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -414,6 +415,8 @@ require('lazy').setup({
         exclude_filetypes = { 'TelescopePrompt', 'NvimTree' },
         log_file_path = nil, -- absolute path to Tabnine log file
       }
+      require('oil').setup()
+      vim.keymap.set('n', '<leader>e', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
       require('tabnine.status').status()
 
@@ -857,7 +860,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'onedark_dark'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
