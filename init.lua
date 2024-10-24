@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
+vim.g.have_nerd_font = false
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -99,7 +99,7 @@ vim.g.have_nerd_font = true
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
-vim.opt.number = true
+vim.opt.number = false
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.opt.relativenumber = true
@@ -120,6 +120,7 @@ end)
 
 -- Enable break indent
 vim.opt.breakindent = true
+vim.opt.hidden = true
 
 -- Save undo history
 vim.opt.undofile = true
@@ -133,6 +134,9 @@ vim.opt.signcolumn = 'yes'
 
 -- Decrease update time
 vim.opt.updatetime = 250
+
+vim.opt.termguicolors = true -- True color support
+vim.opt.virtualedit = 'block' -- Allow cursor to move where there is no text in visual block mode
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
@@ -271,6 +275,14 @@ require('lazy').setup({
   },
   { 'rose-pine/neovim', name = 'rose-pine' },
   { 'codota/tabnine-nvim', build = './dl_binaries.sh' },
+  { 'numToStr/Comment.nvim', opts = {} },
+
+  {
+    'windwp/nvim-ts-autotag',
+    config = function()
+      require('nvim-ts-autotag').setup {}
+    end,
+  },
   -- {
   --   'nvim-neo-tree/neo-tree.nvim',
   --   branch = 'v3.x',
@@ -404,6 +416,16 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+
+      -- require 'config.color'
+      -- require 'config.font'
+      --
+      if vim.fn.has 'termguicolors' == 1 then
+        --[[ vim.t_8f = "[[38;2;%lu;%lu;%lum" ]]
+        --[[ vim.t_8b = "[[48;2;%lu;%lu;%lum" ]]
+        vim.opt.termguicolors = true
+        -- vim.opt.background = "light"
+      end
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -431,90 +453,55 @@ require('lazy').setup({
         log_file_path = nil, -- absolute path to Tabnine log file
       }
       require('bufferline').setup {}
+
       vim.keymap.set('n', '<leader>e', '<CMD>Neotree toggle position=right<CR>', { desc = 'Open neo-tree' })
       -- vim.keymap.set('n', '<leader>b', '<CMD>Neotree toggle buffers<CR>', { desc = 'Open buffers tree' })
       vim.keymap.set('n', '<S-l>', '<CMD>BufferLineCycleNext<CR>', { desc = 'Cycle to Next Buffer' })
       vim.keymap.set('n', '<S-h>', '<CMD>BufferLineCyclePrev<CR>', { desc = 'Cycle to Previous Buffer' })
-      vim.keymap.set('n', '<leader>f', '<CMD>Telescope find_files<CR>', { desc = 'Find [F]iles' })
-      vim.keymap.set('n', '<leader>bd', '<CMD>BufferLinePickClose<CR>', { desc = 'Close current buffer' })
+      -- vim.keymap.set('n', '<leader>f', '<CMD>Telescope find_files<CR>', { desc = 'Find [F]iles' })
+      vim.keymap.set('n', '<leader>bd', '<CMD>bd<CR>', { desc = 'Close current buffer' })
       vim.keymap.set('n', '<C-s>', '<CMD>w<CR>', { desc = 'Save current buffer' })
       require('onedarkpro').setup {}
       require('tabnine.status').status()
       require('no-clown-fiesta').setup {}
 
       require('rose-pine').setup {
-        variant = 'auto', -- auto, main, moon, or dawn
-        dark_variant = 'main', -- main, moon, or dawn
-        dim_inactive_windows = false,
-        extend_background_behind_borders = true,
+        variant = 'moon',
+      }
 
-        enable = {
-          terminal = true,
-          legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
-          migrations = true, -- Handle deprecated options automatically
-        },
-
+      require('tokyonight').setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        style = 'night', -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+        transparent = false, -- Enable this to disable setting the background color
+        terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
         styles = {
-          bold = true,
-          italic = true,
-          transparency = true,
+          -- Style to be applied to different syntax groups
+          -- Value is any valid attr-list value for `:help nvim_set_hl`
+          comments = { italic = true },
+          keywords = { italic = true },
+          functions = {},
+          variables = {},
+          -- Background styles. Can be "dark", "transparent" or "normal"
+          sidebars = 'dark', -- style for sidebars, see below
+          floats = 'dark', -- style for floating windows
         },
+        sidebars = { 'qf', 'help', 'nvimtree' }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
+        day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
+        hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
+        dim_inactive = false, -- dims inactive windows
+        lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
 
-        groups = {
-          border = 'muted',
-          link = 'iris',
-          panel = 'surface',
+        --- You can override specific color groups to use other groups or a hex color
+        --- function will be called with a ColorScheme table
+        ---@param colors ColorScheme
+        on_colors = function(colors) end,
 
-          error = 'love',
-          hint = 'iris',
-          info = 'foam',
-          note = 'pine',
-          todo = 'rose',
-          warn = 'gold',
-
-          git_add = 'foam',
-          git_change = 'rose',
-          git_delete = 'love',
-          git_dirty = 'rose',
-          git_ignore = 'muted',
-          git_merge = 'iris',
-          git_rename = 'pine',
-          git_stage = 'iris',
-          git_text = 'rose',
-          git_untracked = 'subtle',
-
-          h1 = 'iris',
-          h2 = 'foam',
-          h3 = 'rose',
-          h4 = 'gold',
-          h5 = 'pine',
-          h6 = 'foam',
-        },
-
-        palette = {
-          -- Override the builtin palette per variant
-          -- moon = {
-          --     base = '#18191a',
-          --     overlay = '#363738',
-          -- },
-        },
-
-        highlight_groups = {
-          -- Comment = { fg = "foam" },
-          -- VertSplit = { fg = "muted", bg = "muted" },
-        },
-
-        before_highlight = function(group, highlight, palette)
-          -- Disable all undercurls
-          -- if highlight.undercurl then
-          --     highlight.undercurl = false
-          -- end
-          --
-          -- Change palette colour
-          -- if highlight.fg == palette.pine then
-          --     highlight.fg = palette.foam
-          -- end
-        end,
+        --- You can override specific highlights to use other groups or a hex color
+        --- function will be called with a Highlights and ColorScheme table
+        ---@param highlights Highlights
+        ---@param colors ColorScheme
+        on_highlights = function(highlights, colors) end,
       }
 
       -- Enable Telescope extensions if they are installed
@@ -1004,30 +991,41 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
+
+  {
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'tsx',
+        'javascript',
+        'typescript', -- Added TSX, JavaScript, and TypeScript
+      },
       auto_install = true,
       highlight = {
         enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+
+      -- Enable autotag for JSX/TSX auto-closing tags
+      autotag = {
+        enable = true,
+      },
     },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1042,7 +1040,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
