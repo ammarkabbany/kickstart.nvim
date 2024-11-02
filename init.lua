@@ -473,7 +473,7 @@ require('lazy').setup({
       vim.opt['guicursor'] = 'i:block'
 
       require('rose-pine').setup {
-        variant = 'moon',
+        disable_background = true,
       }
 
       require('tokyonight').setup {
@@ -1046,6 +1046,7 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
+  -- require 'kickstart.plugins.zen-mode',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
