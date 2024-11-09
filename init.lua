@@ -282,7 +282,53 @@ require('lazy').setup({
   { 'rose-pine/neovim', name = 'rose-pine' },
   { 'codota/tabnine-nvim', build = './dl_binaries.sh' },
   { 'numToStr/Comment.nvim', opts = {} },
+  -- Refactoring tool
+  {
+    'ThePrimeagen/refactoring.nvim',
+    keys = {
+      {
+        '<leader>r',
+        function()
+          require('refactoring').select_refactor()
+        end,
+        mode = 'v',
+        noremap = true,
+        silent = true,
+        expr = false,
+      },
+    },
+    opts = {},
+  },
+  {
+    'folke/zen-mode.nvim',
+    cmd = 'ZenMode',
+    opts = {
+      plugins = {
+        gitsigns = true,
+        tmux = true,
+        kitty = { enabled = false, font = '+2' },
+      },
+    },
+    keys = { { '<leader>z', '<cmd>ZenMode<cr>', desc = 'Zen Mode' } },
+  },
 
+  -- {
+  --   'nvimdev/dashboard-nvim',
+  --   event = 'VimEnter',
+  --   opts = function(_, opts)
+  --     local logo = [[
+  --       ██████╗ ███████╗██╗   ██╗ █████╗ ███████╗██╗     ██╗███████╗███████╗
+  --       ██╔══██╗██╔════╝██║   ██║██╔══██╗██╔════╝██║     ██║██╔════╝██╔════╝
+  --       ██║  ██║█████╗  ██║   ██║███████║███████╗██║     ██║█████╗  █████╗
+  --       ██║  ██║██╔══╝  ╚██╗ ██╔╝██╔══██║╚════██║██║     ██║██╔══╝  ██╔══╝
+  --       ██████╔╝███████╗ ╚████╔╝ ██║  ██║███████║███████╗██║██║     ███████╗
+  --       ╚═════╝ ╚══════╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝╚═╝     ╚══════╝
+  --     ]]
+  --
+  --     logo = string.rep('\n', 8) .. logo .. '\n\n'
+  --     opts.config.header = vim.split(logo, '\n')
+  --   end,
+  -- },
   {
     'windwp/nvim-ts-autotag',
     config = function()
