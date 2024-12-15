@@ -520,7 +520,14 @@ require('lazy').setup({
 
       require('rose-pine').setup {
         disable_background = true,
+        styles = {
+          bold = true,
+          italic = true,
+          transparency = true,
+        },
       }
+
+      vim.cmd.colorscheme 'rose-pine'
 
       require('tokyonight').setup {
         -- your configuration comes here
@@ -997,7 +1004,6 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'rose-pine'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
