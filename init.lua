@@ -277,7 +277,8 @@ require("lazy").setup({
   },
 
   { "rose-pine/neovim", name = "rose-pine" },
-  { "codota/tabnine-nvim", build = "./dl_binaries.sh" },
+  -- { "codota/tabnine-nvim", build = "./dl_binaries.sh" },
+  { "github/copilot.vim" },
   { "numToStr/Comment.nvim", opts = {} },
   -- Refactoring tool
   {
@@ -494,15 +495,15 @@ require("lazy").setup({
         },
       })
 
-      require("tabnine").setup({
-        disable_auto_comment = true,
-        accept_keymap = "<S-Tab>",
-        dismiss_keymap = "<C-]>",
-        debounce_ms = 800,
-        suggestion_color = { gui = "#808080", cterm = 244 },
-        exclude_filetypes = { "TelescopePrompt", "NvimTree" },
-        log_file_path = nil, -- absolute path to Tabnine log file
-      })
+      -- require("tabnine").setup({
+      --   disable_auto_comment = true,
+      --   accept_keymap = "<S-Tab>",
+      --   dismiss_keymap = "<C-]>",
+      --   debounce_ms = 800,
+      --   suggestion_color = { gui = "#808080", cterm = 244 },
+      --   exclude_filetypes = { "TelescopePrompt", "NvimTree" },
+      --   log_file_path = nil, -- absolute path to Tabnine log file
+      -- })
       require("bufferline").setup({})
 
       vim.keymap.set("n", "<leader>e", "<CMD>Neotree toggle float<CR>", { desc = "Open neo-tree" })
@@ -518,7 +519,7 @@ require("lazy").setup({
           terminal_colors = true,
         },
       })
-      require("tabnine.status").status()
+      -- require("tabnine.status").status()
       vim.opt["guicursor"] = "i:block"
 
       -- require('rose-pine').setup {
@@ -607,7 +608,7 @@ require("lazy").setup({
         builtin.find_files({ cwd = vim.fn.stdpath("config") })
       end, { desc = "[S]earch [N]eovim files" })
 
-      vim.cmd.colorscheme("onedark")
+      vim.cmd.colorscheme("rose-pine")
     end,
   },
 
